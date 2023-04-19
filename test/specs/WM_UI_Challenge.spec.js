@@ -16,8 +16,8 @@ describe('Validate CNN web page', () => {
         await Search.waitAndEnterTextInSearchBar(textToSearch)
         await Search.clickSearchButton()
 
-        const queryDisplayResult = await Search.resultText.getText()
-        await expect(queryDisplayResult).to.be.equal(textToSearch)
+        const headerDisplayResult = await Search.resultText.getText()
+        await expect(headerDisplayResult).to.be.equal(textToSearch)
 
         await Search.scrollToFooterSearchAndEnterText(textToSearch)
 
