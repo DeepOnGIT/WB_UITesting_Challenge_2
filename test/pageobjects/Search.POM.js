@@ -9,44 +9,43 @@ const RESULT_TEXT = '//*[@id="search__query"]' //xPath to find text on which res
 const FOOTER_SEARCH_BAR = '//*[@id="pageFooter"]//input' //xpath to find search bar in footer
 const FOOTER_SEARCH_BUTTON = '//*[@id="pageFooter"]//span[text()="Search"]' //xPath to find search button in footer
 
-class Search extends BaseURL{
-    
+class Search extends BaseURL {
+
     //Open browser
-    async openURL(){
+    async openURL() {
         await browser.maximizeWindow() //Maximize window 
         return super.open('');
     }
 
-    async waitAndClickSearchIcon(){
+    async waitAndClickSearchIcon() {
         await $(SEARCH_ICON).waitForDisplayed()
         return $(SEARCH_ICON).click()
     }
 
-    async waitAndEnterTextInSearchBar(inputText){
+    async waitAndEnterTextInSearchBar(inputText) {
         await $(HEADER_SEARCH_BAR).waitForDisplayed()
         await $(HEADER_SEARCH_BAR).setValue(inputText)
     }
 
-    async clickSearchButton(){
+    async clickSearchButton() {
         await $(HEADER_SEARCH_BUTTON).click()
     }
 
-    async validateSearchResult(outputText){
-        // Validates whether results are retreived using the exact input text 
-        // Displaying 1-1 results out of 1 for [inputText] - whether [inputText equals the query string or not]
-        const queryDisplayResult = await $(RESULT_TEXT).getText()
-        await expect(queryDisplayResult).to.be.equal(outputText)
-        // Validates whether results are retreived using the exact input text 
-        // Displaying 1-1 results out of 1 for [inputText] - whether [inputText contains or not]
-        // const completeDisplayResultText = await $(COMP1LETE_RESULT_TEXT).getText()
-        // await expect(completeDisplayResultText).to.be.include(outputText)
+    get resultText(){
+        return $(RESULT_TEXT)
     }
 
-    async scrollToFooterSearchAndEnterText(footerInputText){
+    async validateSearchResult(outputText) {
+        const queryDisplayResult = await $(RESULT_TEXT).getText()
+        await expect(queryDisplayResult).to.be.equal(outputText)
+    }
+
+    async scrollToFooterSearchAndEnterText(footerInputText) {
         await $(FOOTER_SEARCH_BAR).scrollIntoView()
         await $(FOOTER_SEARCH_BAR).setValue(footerInputText)
         await $(FOOTER_SEARCH_BUTTON).click()
     }
 }
+
 module.exports = new Search();
 

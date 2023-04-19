@@ -97,53 +97,42 @@ class VideoPage extends BaseURL {
         
     }
 
-
-    async validateVideoFunctions() {
-        if (await $(AD_DIV).isDisplayed()) {
-            
-            //If Ad is present
-            browser.pause(100)
-            await $(AD_PAUSE_BTN).waitForDisplayed()
-            expect(await $(AD_PAUSE_BTN).isDisplayed()).to.be.true; //Validating whether pause button is present
-            await $(AD_PAUSE_BTN).click() //Click Pause BTN
-
-            expect(await $(AD_PAUSE_BTN).isDisplayed()).to.be.false; //Onclicking pause expect pause to be disabled
-            expect(await $(AD_PLAY_BTN).isEnabled()).to.be.true; //Validating whether play button is present
-
-            await $(AD_PLAY_BTN).click() //Click Play
-
-            expect(await $(AD_MUTE_BTN).isDisplayed()).to.be.true; //Validating whether mute icon is present on screen or not
-            await $(AD_MUTE_BTN).click() //Click mute
-            expect(await $(AD_MUTE_BTN).isDisplayed()).to.be.false; //mute button should disappear
-            expect(await $(AD_UNMUTE_BTN).isDisplayed()).to.be.true; //unmute should be shown on screen
-            await $(AD_UNMUTE_BTN).click() //Click unmute
-
-            expect(await $(AD_FULLSCREEN_BTN).isDisplayed()).to.be.true; //Full screen button is displayed
-            await $(AD_FULLSCREEN_BTN).click() //Click to full screen
-            expect(await $(AD_FULLSCREEN_BTN).isDisplayed()).to.be.false; //Full screen button should disappear
-            expect(await $(AD_COLLAPSE_BTN).isDisplayed()).to.be.true; //Collapse button is displayed
-
-            await $(AD_COLLAPSE_BTN).click() //Click Collapse screen
-
-            //Wait until Title of the main video is present
-            await $(AD_PROGRESS_BAR).waitUntil(async function () {
-                return (await $(VIDEO_TITLE).isDisplayed()) 
-            },
-                {
-                    timeout: 60000,
-                    timeoutMsg: "Ad didn't end in 30 secs."
-                })
-
-                
-            //Actual video validation starts from here
-            await this.validateVideoPlayer()
-        }
-
-        else {
-            //If Ad is not present
-            await this.validateVideoPlayer()
-        }
+    get adDiv(){
+        return $(AD_DIV)
     }
+
+    get adPauseButton(){
+        return $(AD_PAUSE_BTN)
+    }
+
+    get adPlayButton(){
+        return $(AD_PLAY_BTN)
+    }
+
+    get adMuteButton(){
+        return $(AD_MUTE_BTN)
+    }
+
+    get adUnmuteButton(){
+        return $(AD_UNMUTE_BTN)
+    }
+
+    get adFullScreenBtn(){
+        return $(AD_FULLSCREEN_BTN)
+    }
+
+    get adCollapseButton(){
+        return $(AD_COLLAPSE_BTN)
+    }
+
+    get adProgressBar(){
+        return $(AD_PROGRESS_BAR)
+    }
+
+    get videoTitle(){
+        return $(VIDEO_TITLE)
+    }
+
 }
 
 module.exports = new VideoPage();

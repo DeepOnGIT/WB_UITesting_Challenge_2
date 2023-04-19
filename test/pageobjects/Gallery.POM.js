@@ -6,9 +6,9 @@ const PREV_BUTTON = '//button[@class="gallery-inline__prev"]' //Prev button at t
 const PHOTO_COUNT = '//div[@class="gallery-inline__counter"]' //Number of photos count
 const GALLERY = '//div[@class="gallery-inline__slides"]' //Gallery xPath
 const HEADLINE = '//H1[@class="headline__text inline-placeholder"]' //xPath to find headline
-const PICTURE_INFO = '//span[@class="inline-placeholder"]' //xPath to find picture info
 const NEXT_OVERLAY = '//button[@class="gallery-inline__next-overlay"]' //Next button overlay
 const PREV_OVERLAY = '//button[@class="gallery-inline__prev-overlay"]' //Next button overlay
+const IMAGE_DIV = '//*[@class="image_gallery-image__picture"]//img' //Img tag to validate
 
 
 class Gallery extends BaseURL{
@@ -18,7 +18,11 @@ class Gallery extends BaseURL{
         return super.open('travel/gallery/top-christmas-markets/index.html')
     }
 
-    async waitAndScrollToButton(){
+    async waitForImgtoBeDisplayed(){
+        await $(IMAGE_DIV).waitForDisplayed()
+    }
+
+    async waitAndScrollToHeadline(){
         await $(HEADLINE).scrollIntoView()
     }
 
@@ -42,21 +46,18 @@ class Gallery extends BaseURL{
         await $(PREV_OVERLAY).click()
     }
 
-    async validateNextPhotoCount(){
-        await $(GALLERY).waitForDisplayed()
-        let nextPhotoCount = await $(PHOTO_COUNT).getText()
-        let expectedNextCount = '2 of 26'
-        expect (nextPhotoCount).to.be.equal(expectedNextCount)
+    get photoCount(){
+        return $(PHOTO_COUNT)
     }
 
-    async validatePrevPhotoCount(){
-        await $(GALLERY).waitForDisplayed()
-        let nextPhotoCount = await $(PHOTO_COUNT).getText()
-        let expectedPrevCount = '1 of 26'
-        expect (nextPhotoCount).to.be.equal(expectedPrevCount)
-
+    async validateTotalCount(){
+        let totalPhotoCount = await $(PHOTO_COUNT).getText()
+        expect(totalPhotoCount).to.be.include('26')
     }
 
+    async waitForImageToBeLoaded(){
+        await $(GALLERY).waitForDisplayed()
+    }
 
 }
 

@@ -1,3 +1,4 @@
+const { expect } = require('chai')
 const Search = require('../pageobjects/Search.POM')
 
 const textToSearch = 'India' //Text to be entered in search box
@@ -8,10 +9,13 @@ describe('Validate CNN web page', () => {
         await Search.waitAndClickSearchIcon()
         await Search.waitAndEnterTextInSearchBar(textToSearch)
         await Search.clickSearchButton()
-        await Search.validateSearchResult(textToSearch)
+
+        const queryDisplayResult = await Search.resultText.getText()
+        await expect(queryDisplayResult).to.be.equal(textToSearch)
+
         await Search.scrollToFooterSearchAndEnterText(textToSearch)
-        await Search.validateSearchResult(textToSearch)
+
+        const footerDisplayResult = await Search.resultText.getText()
+        await expect(footerDisplayResult).to.be.equal(textToSearch)
     })
 })
-
-
