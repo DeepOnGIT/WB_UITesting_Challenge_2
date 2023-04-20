@@ -72,8 +72,9 @@ describe('Validate CNN web page', () => {
         if (await VideoPage.adDiv.isDisplayed()) {
 
             //If Ad is present
-            browser.pause(1000)
+            await VideoPage.adProgressBar.waitForDisplayed()
             await VideoPage.adPauseButton.waitForDisplayed()
+            expect(await VideoPage.adProgressBar.isDisplayed()).to.be.true;
             expect(await VideoPage.adPauseButton.isDisplayed()).to.be.true; //Validating whether pause button is present
             await VideoPage.adPauseButton.click() //Click Pause BTN
 
@@ -97,10 +98,10 @@ describe('Validate CNN web page', () => {
 
             //Wait until Title of the main video is present
             await VideoPage.adProgressBar.waitUntil(async function () {
-                return (await VideoPage.videoTitle.isDisplayed())
+                return (await VideoPage.adCountDown.getText()) === 'Ad:0'
             },
                 {
-                    timeout: 60000,
+                    timeout: 30000,
                     timeoutMsg: "Ad didn't end in 30 secs."
                 })
 
@@ -109,7 +110,7 @@ describe('Validate CNN web page', () => {
             await VideoPage.validateVideoPlayer()
         }
 
-        else {
+        else if(VideoPage.adDiv.isDisplayed({ reverse: true })) {
             //If Ad is not present
             await VideoPage.validateVideoPlayer()
         }
